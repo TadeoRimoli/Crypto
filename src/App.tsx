@@ -1,48 +1,252 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
 const App: React.FC = () => {
   const [historialPrecios, setHistorialPrecios] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const symbol = 'bitcoin';  // Puedes cambiar a otro símbolo si es necesario
-        const intervalo = 60;  // Intervalo en minutos (1 hora en este caso)
-        const limite = 20;
-
-        const response = await axios.get(
-          `https://api.coingecko.com/api/v3/coins/${symbol}/market_chart`,
-          {
-            params: {
-              vs_currency: 'usd',
-              interval: 'minute' + intervalo,
-              from: Math.floor((Date.now() - intervalo * 60 * 1000 * limite) / 1000),
-              to: Math.floor(Date.now() / 1000),
-            },
+  const api_key = "CG-Q5xb2CHYQYKAQ6HkZ31vKBcm"
+  const coingeckoapiurl = "https://api.coingecko.com/api/v3"
+  const [data,setData]=useState([])
+  async function getBtcInfo(){
+      let response = await axios.get(coingeckoapiurl+'/coins/binance-bitcoin/market_chart',{
+          params:{
+              vs_currency:'usd',
+              days:2,
+              x_cg_demo_api_key:api_key
           }
-        );
-
-        const precios = response.data.prices;
-        const ultimosPrecios = precios.slice(-limite).map((precio: number[]) => precio[1]);
-
-        setHistorialPrecios(ultimosPrecios);
-      } catch (error) {
-        console.error('Error al obtener datos de la API:', error.message);
+      })
+      
+      if(response.status == 200){
+          setData(response.data)
+      }else{
+          console.log(response.status)
       }
-    };
+  }
+  const prices=[
+        [
+            1705183261924,
+            42965.74097370059
+        ],
+        [
+            1705186857934,
+            42961.7203495467
+        ],
+        [
+            1705190489970,
+            42848.47451640749
+        ],
+        [
+            1705194068990,
+            42697.81035924758
+        ],
+        [
+            1705197657269,
+            42778.29903610591
+        ],
+        [
+            1705201280046,
+            42757.98342959938
+        ],
+        [
+            1705204847326,
+            42675.56001761096
+        ],
+        [
+            1705208531946,
+            42562.31132663897
+        ],
+        [
+            1705212114244,
+            42704.64363545284
+        ],
+        [
+            1705215697674,
+            42984.370023795724
+        ],
+        [
+            1705219229481,
+            42953.296040174224
+        ],
+        [
+            1705222819541,
+            43000.279740181286
+        ],
+        [
+            1705226438329,
+            42946.26645181208
+        ],
+        [
+            1705230033267,
+            42890.12463639017
+        ],
+        [
+            1705233742991,
+            42817.99980499583
+        ],
+        [
+            1705237299908,
+            42739.77447179521
+        ],
+        [
+            1705240865614,
+            42900.62935751003
+        ],
+        [
+            1705244446706,
+            42919.11390786829
+        ],
+        [
+            1705248094995,
+            42901.19652700834
+        ],
+        [
+            1705251740740,
+            42910.8551094731
+        ],
+        [
+            1705255227819,
+            42970.37989439881
+        ],
+        [
+            1705258841817,
+            42912.59869673776
+        ],
+        [
+            1705262416042,
+            42673.61970251325
+        ],
+        [
+            1705266012282,
+            42507.76890096498
+        ],
+        [
+            1705269631543,
+            42442.088434188234
+        ],
+        [
+            1705273229309,
+            42279.079271689065
+        ],
+        [
+            1705276806877,
+            41753.68155974889
+        ],
+        [
+            1705280402580,
+            42226.0482506253
+        ],
+        [
+            1705284162520,
+            42242.652522430864
+        ],
+        [
+            1705287700053,
+            42358.46495312003
+        ],
+        [
+            1705291223577,
+            42520.55498117203
+        ],
+        [
+            1705294803627,
+            42567.442340384805
+        ],
+        [
+            1705298445469,
+            42736.27916799869
+        ],
+        [
+            1705302070374,
+            42640.98001402418
+        ],
+        [
+            1705305827241,
+            42704.12550087481
+        ],
+        [
+            1705309253069,
+            42677.56569785656
+        ],
+        [
+            1705312913718,
+            42712.71391926351
+        ],
+        [
+            1705316507788,
+            42546.22079252131
+        ],
+        [
+            1705320091001,
+            42673.55848288864
+        ],
+        [
+            1705323759750,
+            42635.881490202904
+        ],
+        [
+            1705327291328,
+            42824.959051230086
+        ],
+        [
+            1705330837050,
+            42219.41657918872
+        ],
+        [
+            1705334520106,
+            42257.148664380176
+        ],
+        [
+            1705338015312,
+            42516.25075282865
+        ],
+        [
+            1705341724609,
+            42692.42700720438
+        ],
+        [
+            1705345262312,
+            42954.24288046856
+        ],
+        [
+            1705348801220,
+            42905.29339904443
+        ],
+        [
+            1705352556833,
+            42865.9823090945
+        ],
+        [
+            1705355785000,
+            42755.49757145604
+        ]
+    ];
 
-    fetchData();
-  }, []);
 
   return (
     <div>
-      <h1>Historial de Precios</h1>
-      <ul>
-        {historialPrecios.map((precio, index) => (
-          <li key={index}>Hora {index + 1}: ${precio.toFixed(2)}</li>
-        ))}
-      </ul>
+        <div className="bg-gray-100">
+            <img className="w-80"  src="./coingecko.png"/>
+            <p>Powered by CoinGecko</p>
+            <button onClick={getBtcInfo} className="text-white">Get info</button>
+        </div>
+         <h1>Lista de Datos</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>UTC Timestamp</th>
+            <th>UTC -3 Timestamp</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prices.map(([timestamp, price]) => (
+            <tr key={timestamp}>
+              <td>{new Date(timestamp).toUTCString()}</td>
+              <td>{new Date(timestamp - 3 * 60 * 60 * 1000).toUTCString()}</td>
+              <td>{price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </div>
   );
 };
